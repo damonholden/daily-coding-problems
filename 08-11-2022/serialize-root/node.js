@@ -12,4 +12,4 @@ const node = new Node(
   new Node('right')
 );
 
-module.exports = node;
+module.exports = { Node, node };
