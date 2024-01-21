@@ -1,40 +1,18 @@
-const fs = require('fs');
-const readline = require('node:readline');
-const { stdin: input, stdout: output } = require('node:process');
+import * as fs from 'node:fs/promises'
+import * as readline from 'node:readline/promises'
+import {stdin as input, stdout as output} from 'node:process';
 
-const rl = readline.createInterface({ input, output });
+const rl = readline.createInterface({input, output});
 
-rl.question('Folder name: ', (folderName) => {
-	try {
-		if (fs.existsSync(folderName)) {
-			throw new Error('Folder already exists.');
-		}
+try {
+	const folderName = await rl.question('What is the task name? (used to name the folder):')
 
-		fs.mkdirSync(folderName);
+	await fs.mkdir(folderName);
+	await fs.appendFile(`${folderName}/challenge.txt`, '')
+	await fs.appendFile(`${folderName}/solution.js`, '')
+	await fs.appendFile(`${folderName}/solution.test.js`, '')
+} catch (error) {
+	console.info(error.message)
+}
 
-		fs.appendFile(`${folderName}/challenge.md`, '', (err) => {
-			if (err) {
-				throw err;
-			}
-			console.log('challenge.md created.');
-		});
-
-		fs.appendFile(`${folderName}/solution.js`, '', (err) => {
-			if (err) {
-				throw err;
-			}
-			console.log('solution.js created.');
-		});
-
-		fs.appendFile(`${folderName}/solution.test.js`, '', (err) => {
-			if (err) {
-				throw err;
-			}
-			console.log('solution.test.js created.');
-		});
-	} catch (err) {
-		console.error(err.message);
-	}
-
-	rl.close();
-});
+rl.close();
